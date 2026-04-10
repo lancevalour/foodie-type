@@ -932,6 +932,16 @@ let currentQ = 0;
 let scores = { A: 0, S: 0, F: 0, I: 0 };
 let answered = {};
 let advanceTimer = null;
+let shuffledOrders = {}; // per-question shuffled display order
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 function startQuiz() {
   currentQ = 0;
@@ -939,6 +949,10 @@ function startQuiz() {
   answered = {};
   clearTimeout(advanceTimer);
   advanceTimer = null;
+  shuffledOrders = {};
+  questions.forEach((q, i) => {
+    shuffledOrders[i] = shuffle(q.options.map((_, idx) => idx));
+  });
   document.getElementById('quiz').style.display = 'block';
   document.body.style.overflow = 'hidden';
   renderQuestion();
@@ -963,12 +977,13 @@ function renderQuestion() {
 
   const container = document.getElementById('q-options');
   container.innerHTML = '';
-  q.options.forEach((opt, i) => {
+  shuffledOrders[currentQ].forEach((originalIdx) => {
+    const opt = q.options[originalIdx];
     const btn = document.createElement('button');
     btn.className = 'q-option';
     btn.textContent = opt.label;
-    if (answered[currentQ] === i) btn.classList.add('selected');
-    btn.onclick = () => selectOption(i, opt);
+    if (answered[currentQ] === originalIdx) btn.classList.add('selected');
+    btn.onclick = () => selectOption(originalIdx, opt);
     container.appendChild(btn);
   });
 }
