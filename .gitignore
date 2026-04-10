@@ -1,0 +1,4 @@
+.vercel
+node_modules/
+generate-preview.js
+package*.json

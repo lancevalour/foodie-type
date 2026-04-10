@@ -4,6 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>吃货人格测试 — 你是哪种吃货？</title>
+  <meta property="og:title" content="吃货人格测试 — 你是哪种吃货？" />
+  <meta property="og:description" content="20道题，16种人格，零卡路里。测测你是风味探险家、沙发美食评论家，还是早午餐女王？" />
+  <meta property="og:image" content="https://foodie-type.vercel.app/preview.png" />
+  <meta property="og:url" content="https://foodie-type.vercel.app" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="吃货人格测试 — 你是哪种吃货？" />
+  <meta name="twitter:description" content="20道题，16种人格，零卡路里。测测你是风味探险家还是沙发美食评论家？" />
+  <meta name="twitter:image" content="https://foodie-type.vercel.app/preview.png" />
   <style>
     :root {
       --bg: #faf8f4;
@@ -368,6 +377,63 @@
       transition: background 0.2s;
     }
     .btn-share:hover { background: #cf4f2e; }
+    .btn-instagram {
+      background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      color: white;
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      transition: opacity 0.2s;
+    }
+    .btn-instagram:hover { opacity: 0.88; }
+
+    /* ── SHARE CARD MODAL ── */
+    #share-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 400;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    #share-modal.open { display: flex; }
+    .share-modal-inner {
+      background: white;
+      border-radius: 20px;
+      padding: 32px 28px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+    }
+    .share-modal-inner h3 { font-size: 1.1rem; margin-bottom: 8px; }
+    .share-modal-inner p { font-size: 0.82rem; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
+    #card-canvas { border-radius: 12px; max-width: 100%; box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
+    .share-modal-actions { display: flex; gap: 12px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+    .btn-download {
+      background: var(--accent);
+      color: white;
+      padding: 10px 24px;
+      border-radius: 24px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+    }
+    .btn-modal-close {
+      background: transparent;
+      color: var(--muted);
+      padding: 10px 24px;
+      border-radius: 24px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      border: 2px solid var(--border);
+      font-family: inherit;
+    }
 
     /* ── FOOTER ── */
     footer {
@@ -591,10 +657,24 @@
     <div class="result-traits" id="result-traits"></div>
     <div class="result-actions">
       <button class="btn-retake" onclick="retake()">重新测试</button>
-      <button class="btn-share" onclick="shareResult()">分享结果</button>
+      <button class="btn-share" onclick="shareResult()">复制链接</button>
+      <button class="btn-instagram" onclick="openShareCard()">📸 生成分享图</button>
     </div>
     <br><br>
     <button class="btn-retake" onclick="closeResult()" style="font-size:0.8rem;padding:8px 20px;">返回首页</button>
+  </div>
+</div>
+
+<!-- SHARE CARD MODAL -->
+<div id="share-modal">
+  <div class="share-modal-inner">
+    <h3>保存图片，分享到 Instagram</h3>
+    <p>长按图片保存，或点击下载按钮，然后发到你的 Instagram 故事 / 朋友圈。</p>
+    <canvas id="card-canvas" width="1080" height="1080"></canvas>
+    <div class="share-modal-actions">
+      <button class="btn-download" onclick="downloadCard()">下载图片</button>
+      <button class="btn-modal-close" onclick="closeShareModal()">关闭</button>
+    </div>
   </div>
 </div>
 
@@ -973,14 +1053,155 @@ function retake() {
 function shareResult() {
   const code = document.getElementById('result-code').textContent;
   const name = document.getElementById('result-name').textContent;
-  const text = `我做了吃货人格测试，结果是 ${code}「${name}」！你是哪种吃货？`;
-  if (navigator.share) {
-    navigator.share({ title: '我的吃货人格', text }).catch(() => {});
-  } else if (navigator.clipboard) {
+  const text = `我做了吃货人格测试，结果是 ${code}「${name}」！\n你是哪种吃货？👉 https://foodie-type.vercel.app`;
+  if (navigator.clipboard) {
     navigator.clipboard.writeText(text).then(() => alert('已复制到剪贴板！'));
   } else {
     alert(text);
   }
+}
+
+function openShareCard() {
+  const code = document.getElementById('result-code').textContent;
+  const type = types[code] || types['CSVI'];
+  drawCard(type, code);
+  document.getElementById('share-modal').classList.add('open');
+}
+
+function closeShareModal() {
+  document.getElementById('share-modal').classList.remove('open');
+}
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const chars = text.split('');
+  let line = '';
+  let currentY = y;
+  for (let i = 0; i < chars.length; i++) {
+    const testLine = line + chars[i];
+    if (ctx.measureText(testLine).width > maxWidth && line !== '') {
+      ctx.fillText(line, x, currentY);
+      line = chars[i];
+      currentY += lineHeight;
+    } else {
+      line = testLine;
+    }
+  }
+  ctx.fillText(line, x, currentY);
+  return currentY;
+}
+
+function drawCard(type, code) {
+  const canvas = document.getElementById('card-canvas');
+  const ctx = canvas.getContext('2d');
+  const W = 1080, H = 1080;
+  canvas.width = W;
+  canvas.height = H;
+
+  // Background gradient
+  const grad = ctx.createLinearGradient(0, 0, W, H);
+  grad.addColorStop(0, '#fff8f5');
+  grad.addColorStop(1, '#fdeee8');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+
+  // Decorative top bar
+  ctx.fillStyle = '#e8603c';
+  ctx.fillRect(0, 0, W, 12);
+
+  // Top label
+  ctx.fillStyle = '#e8603c';
+  ctx.font = 'bold 36px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('吃货人格测试', W / 2, 80);
+
+  // Code badge background
+  const badgeW = 200, badgeH = 56, badgeX = W / 2 - badgeW / 2, badgeY = 110;
+  ctx.fillStyle = '#f0ebe3';
+  roundRect(ctx, badgeX, badgeY, badgeW, badgeH, 14);
+  ctx.fillStyle = '#e8603c';
+  ctx.font = 'bold 28px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText(code, W / 2, badgeY + 38);
+
+  // Emoji
+  ctx.font = '200px serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(type.emoji, W / 2, 460);
+
+  // Name
+  ctx.fillStyle = '#1a1612';
+  ctx.font = 'bold 88px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(type.name, W / 2, 590);
+
+  // Divider
+  ctx.strokeStyle = '#e8e0d5';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(120, 630);
+  ctx.lineTo(W - 120, 630);
+  ctx.stroke();
+
+  // Description
+  ctx.fillStyle = '#7a6e65';
+  ctx.font = '38px sans-serif';
+  ctx.textAlign = 'center';
+  wrapText(ctx, type.desc, W / 2, 690, 840, 58);
+
+  // Traits pills
+  const pillY = 880;
+  const pillH = 56;
+  const pillPad = 30;
+  let totalW = 0;
+  const pillWidths = type.traits.map(t => {
+    ctx.font = '28px sans-serif';
+    return ctx.measureText(t).width + pillPad * 2;
+  });
+  totalW = pillWidths.reduce((a, b) => a + b, 0) + (type.traits.length - 1) * 16;
+  let px = W / 2 - totalW / 2;
+  type.traits.forEach((t, i) => {
+    const pw = pillWidths[i];
+    ctx.fillStyle = '#ffffff';
+    roundRect(ctx, px, pillY, pw, pillH, pillH / 2);
+    ctx.strokeStyle = '#e8e0d5';
+    ctx.lineWidth = 1.5;
+    roundRect(ctx, px, pillY, pw, pillH, pillH / 2, true);
+    ctx.fillStyle = '#1a1612';
+    ctx.font = '26px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(t, px + pw / 2, pillY + 37);
+    px += pw + 16;
+  });
+
+  // Website URL
+  ctx.fillStyle = '#e8603c';
+  ctx.font = '30px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('foodie-type.vercel.app', W / 2, 1020);
+}
+
+function roundRect(ctx, x, y, w, h, r, strokeOnly = false) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+  if (strokeOnly) ctx.stroke(); else ctx.fill();
+}
+
+function downloadCard() {
+  const canvas = document.getElementById('card-canvas');
+  const code = document.getElementById('result-code').textContent;
+  const a = document.createElement('a');
+  a.download = `吃货人格-${code}.png`;
+  a.href = canvas.toDataURL('image/png');
+  a.click();
 }
 </script>
 </body>
