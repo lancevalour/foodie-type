@@ -680,28 +680,25 @@
 
 <script>
 const questions = [
-  // 冒险性（5题）
+  // 冒险性（5题）—— A=+1 勇于尝鲜，C=-1 守住熟悉
   {
     text: "菜单上有道叫「发酵黑蒜泡沫」的菜，你……",
     options: [
-      { label: "直接点。我就是为了这个来的。", dim: 'A', val: 1 },
-      { label: "先问服务员是什么口感，再考虑要不要点。", dim: 'A', val: 0 },
-      { label: "点个牛排。我知道自己喜欢什么。", dim: 'A', val: -1 }
+      { label: "直接点，就是为了这种时刻来的。", dim: 'A', val: 1 },
+      { label: "点个熟悉的，我知道自己喜欢什么。", dim: 'A', val: -1 }
     ]
   },
   {
-    text: "你心目中理想的美食探险是……",
+    text: "你心目中最理想的饮食探险是……",
     options: [
-      { label: "在完全陌生的城市，找一家没有中文菜单的路边摊，指着随便点。", dim: 'A', val: 1 },
-      { label: "找一家口碑很好的新料理，提前做好功课再去。", dim: 'A', val: 0 },
-      { label: "找到那道我最爱的菜的最佳版本。", dim: 'A', val: -1 }
+      { label: "在陌生城市找一家没有中文菜单的路边摊，指着随便点。", dim: 'A', val: 1 },
+      { label: "把某道我一直很爱的菜研究到极致，找到最好的版本。", dim: 'A', val: -1 }
     ]
   },
   {
     text: "饭桌上有人点了一道看起来很奇怪的东西，你……",
     options: [
       { label: "对方还没动筷你就已经伸叉子过去了。", dim: 'A', val: 1 },
-      { label: "先看他吃，再决定要不要试。", dim: 'A', val: 0 },
       { label: "管好自己那份，让别人随便折腾。", dim: 'A', val: -1 }
     ]
   },
@@ -709,33 +706,29 @@ const questions = [
     text: "「主厨惊喜套餐」意味着主厨全权决定你吃什么，且不提前告诉你。你……",
     options: [
       { label: "订！这才是吃饭的最高境界。", dim: 'A', val: 1 },
-      { label: "先问一下有没有过敏填写表，然后再订。", dim: 'A', val: 0 },
-      { label: "不了。我需要提前知道我在吃什么。", dim: 'A', val: -1 }
+      { label: "不了，我需要提前知道我在吃什么。", dim: 'A', val: -1 }
     ]
   },
   {
     text: "你家厨房里，一周的常态是……",
     options: [
       { label: "几乎每天都在尝试新菜谱或新技法。", dim: 'A', val: 1 },
-      { label: "新菜和老菜轮着来。", dim: 'A', val: 0 },
-      { label: "固定的五六道菜，好吃稳定，不折腾。", dim: 'A', val: -1 }
+      { label: "固定的那几道菜，好吃稳定，不折腾。", dim: 'A', val: -1 }
     ]
   },
 
-  // 社交性（5题）
+  // 社交性（5题）—— S=+1 呼朋唤友，L=-1 独自享用
   {
     text: "你印象中最美好的饭局，通常是……",
     options: [
       { label: "一大桌人，所有菜共享，热热闹闹。", dim: 'S', val: 1 },
-      { label: "和一两个好友，吃得刚刚好。", dim: 'S', val: 0 },
-      { label: "一个人，专心品每一口。", dim: 'S', val: -1 }
+      { label: "一个人，安静地专心品每一口。", dim: 'S', val: -1 }
     ]
   },
   {
     text: "在餐厅点菜时，你通常会……",
     options: [
       { label: "多点几道，大家一起分着吃。", dim: 'S', val: 1 },
-      { label: "主要点自己想吃的，但乐意分口给别人尝。", dim: 'S', val: 0 },
       { label: "点自己想吃的，不。我。不。分。", dim: 'S', val: -1 }
     ]
   },
@@ -743,7 +736,6 @@ const questions = [
     text: "给别人做饭这件事，对你来说……",
     options: [
       { label: "是人生最大的快乐之一。", dim: 'S', val: 1 },
-      { label: "有心情的时候很享受。", dim: 'S', val: 0 },
       { label: "太耗精力了，还不如把时间用来好好吃饭。", dim: 'S', val: -1 }
     ]
   },
@@ -751,7 +743,6 @@ const questions = [
     text: "发现了一家超好吃的新餐厅，你会……",
     options: [
       { label: "立刻拉群，组织大家一起去。", dim: 'S', val: 1 },
-      { label: "告诉几个可能感兴趣的朋友。", dim: 'S', val: 0 },
       { label: "自己再去一次，好好享受，不想带人。", dim: 'S', val: -1 }
     ]
   },
@@ -759,33 +750,29 @@ const questions = [
     text: "对你来说，吃饭这件事本质上是……",
     options: [
       { label: "人与人之间最好的联结方式。", dim: 'S', val: 1 },
-      { label: "既是社交仪式，也是个人享受，两者都是。", dim: 'S', val: 0 },
       { label: "一种私人的、最好独自品味的愉悦。", dim: 'S', val: -1 }
     ]
   },
 
-  // 口味 vs 颜值（5题）
+  // 口味 vs 颜值（5题）—— F=+1 口味至上，V=-1 颜值至上
   {
     text: "选餐厅时，你最看重……",
     options: [
       { label: "专门评价菜品味道和质量的点评。", dim: 'F', val: 1 },
-      { label: "口味评价和环境图片都会看。", dim: 'F', val: 0 },
       { label: "室内环境照片和整体氛围感。", dim: 'F', val: -1 }
     ]
   },
   {
-    text: "如果一家餐厅的菜极其好吃，但环境又破又吵，你会去吗？",
+    text: "一家餐厅的菜极其好吃，但环境又破又吵，你会去吗？",
     options: [
-      { label: "当然！菜好吃就是一切。", dim: 'F', val: 1 },
-      { label: "会去，但体验感会打折扣。", dim: 'F', val: 0 },
-      { label: "可能不会。环境也是吃饭体验的一部分。", dim: 'F', val: -1 }
+      { label: "当然去！菜好吃就是一切。", dim: 'F', val: 1 },
+      { label: "可能不会，环境也是吃饭体验的一部分。", dim: 'F', val: -1 }
     ]
   },
   {
     text: "菜上桌的瞬间，你……",
     options: [
       { label: "趁热直接开吃，温度是口感的一部分。", dim: 'F', val: 1 },
-      { label: "随手拍一张，然后开吃。", dim: 'F', val: 0 },
       { label: "花时间调整角度，拍到满意再吃。", dim: 'F', val: -1 }
     ]
   },
@@ -793,7 +780,6 @@ const questions = [
     text: "附近新开了一家很火的网红餐厅，你……",
     options: [
       { label: "等几个月，看看是否经得住时间检验。", dim: 'F', val: 1 },
-      { label: "先看评价，觉得靠谱再去。", dim: 'F', val: 0 },
       { label: "立刻订座——不去怎么知道值不值得。", dim: 'F', val: -1 }
     ]
   },
@@ -801,25 +787,22 @@ const questions = [
     text: "一顿好饭最精华的部分是……",
     options: [
       { label: "真实的味道、口感，以及菜本身的层次感。", dim: 'F', val: 1 },
-      { label: "好吃的食物加上好的氛围，缺一不可。", dim: 'F', val: 0 },
-      { label: "整体的感受——音乐、灯光、摆盘、人。", dim: 'F', val: -1 }
+      { label: "整体的感受——音乐、灯光、摆盘、在场的人。", dim: 'F', val: -1 }
     ]
   },
 
-  // 放纵 vs 自律（5题）
+  // 放纵 vs 自律（5题）—— I=+1 尽情放纵，H=-1 克制自律
   {
     text: "周日早上的早餐，你会吃……",
     options: [
-      { label: "松饼加枫糖浆，再来几片培根，可以的话加杯气泡酒。", dim: 'I', val: 1 },
-      { label: "鸡蛋加吐司，满足但不过分。", dim: 'I', val: 0 },
+      { label: "松饼加枫糖浆，再来几片培根，能配气泡酒最好。", dim: 'I', val: 1 },
       { label: "奇亚籽燕麦或蛋白质粉水果碗。", dim: 'I', val: -1 }
     ]
   },
   {
-    text: "熬过了压力极大的一周，你会用什么犒劳自己？",
+    text: "熬过了压力极大的一周，你会……",
     options: [
-      { label: "点最爱的外卖，你值得。", dim: 'I', val: 1 },
-      { label: "吃顿好的，但不会完全放飞自我。", dim: 'I', val: 0 },
+      { label: "点最爱的外卖。你值得。", dim: 'I', val: 1 },
       { label: "提前备好下周的餐食。掌控感就是治愈。", dim: 'I', val: -1 }
     ]
   },
@@ -827,15 +810,13 @@ const questions = [
     text: "朋友给你夹了一块他自己做的巧克力蛋糕，你……",
     options: [
       { label: "大方接受，顺手再多来一块。", dim: 'I', val: 1 },
-      { label: "吃一小块，细细品。", dim: 'I', val: 0 },
       { label: "礼貌地尝一小口，你在控糖。", dim: 'I', val: -1 }
     ]
   },
   {
-    text: "看菜单的时候，你的目光会自然落在……",
+    text: "看菜单的时候，你的目光自然落在……",
     options: [
       { label: "最过瘾的那几道——芝士焗、红烧肉、奶油意面。", dim: 'I', val: 1 },
-      { label: "好吃又不会让你后悔的均衡选择。", dim: 'I', val: 0 },
       { label: "最干净、最营养的那道菜。", dim: 'I', val: -1 }
     ]
   },
@@ -843,7 +824,6 @@ const questions = [
     text: "甜品对你来说……",
     options: [
       { label: "是不容商量的。吃正餐就是为了有资格吃甜品。", dim: 'I', val: 1 },
-      { label: "看心情，好的话来一份。", dim: 'I', val: 0 },
       { label: "偶尔，特殊场合。水果也算甜品。", dim: 'I', val: -1 }
     ]
   }
@@ -1038,10 +1018,10 @@ function selectOption(idx, opt) {
 }
 
 function showResult() {
-  const A = scores.A >= 0 ? 'A' : 'C';
-  const S = scores.S >= 0 ? 'S' : 'L';
-  const F = scores.F >= 0 ? 'F' : 'V';
-  const I = scores.I >= 0 ? 'I' : 'H';
+  const A = scores.A > 0 ? 'A' : 'C';
+  const S = scores.S > 0 ? 'S' : 'L';
+  const F = scores.F > 0 ? 'F' : 'V';
+  const I = scores.I > 0 ? 'I' : 'H';
   const code = A + S + F + I;
 
   const type = types[code] || types['CSVI'];
