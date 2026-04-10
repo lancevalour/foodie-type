@@ -253,7 +253,28 @@
       border-radius: 4px;
       transition: width 0.3s;
     }
-    .q-count { font-size: 0.8rem; color: var(--muted); margin-bottom: 16px; }
+    .q-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .q-count { font-size: 0.8rem; color: var(--muted); }
+    .btn-back {
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 0.82rem;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 4px 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.15s;
+    }
+    .btn-back:hover { color: var(--accent); }
+    .btn-back:disabled { opacity: 0; pointer-events: none; }
     .q-text { font-size: 1.3rem; line-height: 1.6; margin-bottom: 36px; font-weight: 500; }
     .q-options { display: flex; flex-direction: column; gap: 14px; }
     .q-option {
@@ -551,7 +572,10 @@
     <div class="progress-bar-wrap">
       <div class="progress-bar" id="progress-bar" style="width:5%"></div>
     </div>
-    <div class="q-count" id="q-count">第 1 题，共 20 题</div>
+    <div class="q-nav">
+      <button class="btn-back" id="btn-back" onclick="goBack()" disabled>← 上一题</button>
+      <div class="q-count" id="q-count">第 1 题，共 20 题</div>
+    </div>
     <div class="q-text" id="q-text"></div>
     <div class="q-options" id="q-options"></div>
   </div>
@@ -872,6 +896,7 @@ function renderQuestion() {
   document.getElementById('q-count').textContent = `第 ${currentQ + 1} 题，共 ${questions.length} 题`;
   document.getElementById('q-text').textContent = q.text;
   document.getElementById('progress-bar').style.width = `${((currentQ + 1) / questions.length) * 100}%`;
+  document.getElementById('btn-back').disabled = currentQ === 0;
 
   const container = document.getElementById('q-options');
   container.innerHTML = '';
@@ -883,6 +908,18 @@ function renderQuestion() {
     btn.onclick = () => selectOption(i, opt);
     container.appendChild(btn);
   });
+}
+
+function goBack() {
+  if (currentQ === 0) return;
+  // Remove the current question's answer from scores if it exists
+  if (answered[currentQ] !== undefined) {
+    const cur = questions[currentQ].options[answered[currentQ]];
+    scores[cur.dim] -= cur.val;
+    delete answered[currentQ];
+  }
+  currentQ--;
+  renderQuestion();
 }
 
 function selectOption(idx, opt) {
