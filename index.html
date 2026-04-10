@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>吃货人格测试 — 你是哪种吃货？</title>
+  <style>
+    :root {
+      --bg: #faf8f4;
+      --card: #ffffff;
+      --accent: #e8603c;
+      --accent2: #f5a623;
+      --accent3: #4a9b6f;
+      --text: #1a1612;
+      --muted: #7a6e65;
+      --border: #e8e0d5;
+      --pill-bg: #f0ebe3;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 48px;
+      border-bottom: 1px solid var(--border);
+      background: var(--card);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--accent);
+    }
+    .nav-links { display: flex; gap: 32px; font-size: 0.9rem; color: var(--muted); }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--accent);
+      color: white;
+      padding: 10px 22px;
+      border-radius: 24px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: #cf4f2e; }
+
+    /* ── HERO ── */
+    #home {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 100px 24px 60px;
+      text-align: center;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: var(--pill-bg);
+      color: var(--accent);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      margin-bottom: 28px;
+    }
+    h1 {
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      line-height: 1.2;
+      margin-bottom: 24px;
+      font-weight: 700;
+    }
+    h1 span { color: var(--accent); }
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      line-height: 1.8;
+    }
+    .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      padding: 14px 32px;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-primary:hover { background: #cf4f2e; transform: translateY(-1px); }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      padding: 14px 32px;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      border: 2px solid var(--border);
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--accent); }
+
+    /* ── STATS ── */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      max-width: 700px;
+      margin: 0 auto 80px;
+    }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 36px;
+      text-align: center;
+      flex: 1;
+      min-width: 160px;
+    }
+    .stat-num {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    .stat-label { font-size: 0.85rem; color: var(--muted); }
+
+    /* ── DIMENSIONS ── */
+    #about {
+      background: var(--card);
+      padding: 80px 24px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .section-inner { max-width: 860px; margin: 0 auto; }
+    .section-title {
+      font-size: 1.9rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .section-sub {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 48px;
+      font-size: 0.95rem;
+    }
+    .dims {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 20px;
+    }
+    .dim-card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 22px;
+    }
+    .dim-icon { font-size: 1.8rem; margin-bottom: 12px; }
+    .dim-title { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .dim-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
+    .dim-axis { font-size: 0.75rem; color: var(--accent); margin-top: 10px; }
+
+    /* ── TYPES GRID ── */
+    #types { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
+    .types-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+      margin-top: 48px;
+    }
+    .type-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 22px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .type-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.07); }
+    .type-code {
+      display: inline-block;
+      background: var(--pill-bg);
+      color: var(--accent);
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      padding: 4px 10px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      font-family: monospace;
+    }
+    .type-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+    .type-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
+
+    /* ── QUIZ ── */
+    #quiz {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 200;
+      overflow-y: auto;
+    }
+    .quiz-inner {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+    .quiz-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 40px;
+    }
+    .quiz-logo { font-size: 1.2rem; font-weight: 700; letter-spacing: 2px; color: var(--accent); }
+    .quiz-close {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+    }
+    .quiz-close:hover { border-color: var(--accent); color: var(--accent); }
+    .progress-bar-wrap {
+      height: 4px;
+      background: var(--border);
+      border-radius: 4px;
+      margin-bottom: 40px;
+    }
+    .progress-bar {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 4px;
+      transition: width 0.3s;
+    }
+    .q-count { font-size: 0.8rem; color: var(--muted); margin-bottom: 16px; }
+    .q-text { font-size: 1.3rem; line-height: 1.6; margin-bottom: 36px; font-weight: 500; }
+    .q-options { display: flex; flex-direction: column; gap: 14px; }
+    .q-option {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 22px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-family: inherit;
+      text-align: left;
+      color: var(--text);
+      transition: border-color 0.15s, background 0.15s;
+      line-height: 1.6;
+    }
+    .q-option:hover { border-color: var(--accent); background: #fff6f3; }
+    .q-option.selected { border-color: var(--accent); background: #fff6f3; }
+
+    /* ── RESULT ── */
+    #result {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 200;
+      overflow-y: auto;
+    }
+    .result-inner {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 60px 24px;
+      text-align: center;
+    }
+    .result-emoji { font-size: 4rem; margin-bottom: 16px; }
+    .result-code-badge {
+      display: inline-block;
+      background: var(--pill-bg);
+      color: var(--accent);
+      font-size: 0.9rem;
+      letter-spacing: 3px;
+      padding: 6px 16px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      font-family: monospace;
+    }
+    .result-name { font-size: 2.2rem; font-weight: 700; margin-bottom: 16px; }
+    .result-desc {
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.9;
+      max-width: 520px;
+      margin: 0 auto 40px;
+    }
+    .result-traits {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 48px;
+    }
+    .trait-pill {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 8px 18px;
+      font-size: 0.82rem;
+      color: var(--text);
+    }
+    .result-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-retake {
+      background: transparent;
+      color: var(--text);
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: 2px solid var(--border);
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    .btn-retake:hover { border-color: var(--accent); }
+    .btn-share {
+      background: var(--accent);
+      color: white;
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+    .btn-share:hover { background: #cf4f2e; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      background: var(--card);
+    }
+    .footer-logo { font-size: 1rem; font-weight: 700; letter-spacing: 2px; color: var(--accent); }
+    .footer-note { font-size: 0.78rem; color: var(--muted); }
+
+    @media (max-width: 600px) {
+      nav { padding: 14px 20px; }
+      .nav-links { display: none; }
+      #home { padding: 60px 20px 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">吃货测试</div>
+  <div class="nav-links">
+    <a href="#home">首页</a>
+    <a href="#about">维度说明</a>
+    <a href="#types">所有类型</a>
+  </div>
+  <button class="nav-cta" onclick="startQuiz()">开始测试</button>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-tag">吃货人格测试</div>
+  <h1>你是哪种<span>吃货</span>？</h1>
+  <p class="hero-sub">
+    20道题，16种人格，零卡路里。<br>
+    纯属娱乐，请勿对号入座（但你一定会的）。
+  </p>
+  <div class="hero-buttons">
+    <button class="btn-primary" onclick="startQuiz()">开始测试</button>
+    <button class="btn-secondary" onclick="document.getElementById('types').scrollIntoView({behavior:'smooth'})">浏览所有类型</button>
+  </div>
+
+  <br><br>
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-num">20</div>
+      <div class="stat-label">道题目</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">16</div>
+      <div class="stat-label">种人格类型</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">4</div>
+      <div class="stat-label">个维度</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT / DIMENSIONS -->
+<section id="about">
+  <div class="section-inner">
+    <h2 class="section-title">四大维度</h2>
+    <p class="section-sub">你的结果由四个轴构成——每个都是光谱，不是判决。</p>
+    <div class="dims">
+      <div class="dim-card">
+        <div class="dim-icon">🌶️</div>
+        <div class="dim-title">冒险性</div>
+        <div class="dim-desc">你愿意走出舒适区多远？发酵鲨鱼肉还是炸鸡？陌生食材还是老三样？</div>
+        <div class="dim-axis">勇于尝鲜 ↔ 守住熟悉</div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-icon">🍽️</div>
+        <div class="dim-title">社交性</div>
+        <div class="dim-desc">你吃饭是为了和人连结，还是把用餐当成神圣的独处仪式？</div>
+        <div class="dim-axis">呼朋唤友 ↔ 独自享用</div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-icon">📸</div>
+        <div class="dim-title">感官取向</div>
+        <div class="dim-desc">你更在意舌尖的滋味，还是氛围、摆盘、发出去的那张照片？</div>
+        <div class="dim-axis">口味至上 ↔ 颜值至上</div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-icon">🥗</div>
+        <div class="dim-title">放纵度</div>
+        <div class="dim-desc">你在算卡路里还是在加芝士？在抗拒还是在缴械投降？</div>
+        <div class="dim-axis">尽情放纵 ↔ 克制自律</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ALL TYPES -->
+<section id="types">
+  <div class="section-inner" style="max-width:1100px;margin:0 auto;">
+    <h2 class="section-title">全部 16 种类型</h2>
+    <p class="section-sub">哪一个让你感觉说的就是你？</p>
+    <div class="types-grid">
+      <div class="type-card">
+        <div class="type-code">ASFI</div>
+        <div class="type-name">🗺️ 风味探险家</div>
+        <div class="type-desc">为了一碗传说中的牛肉面可以跨城而去，菜单还没看完就已经点了最奇怪的那道。</div>
+      </div>
+      <div class="type-card">
+        <div class="type-code">ASFH</div>
+        <div class="type-name">🥦 健康探索者</div>
+        <div class="type-desc">在巴厘岛喝螺旋藻汁，在首尔吃发酵食品。勇敢且自律，朋友们都指望你找到好吃又健康的选择。</div>
+      </div>
+      <div class="type-card">
+        <div class="type-code">ASVI</div>
+        <div class="type-name">✨ 氛围制造者</div>
+        <div class="type-desc">每家新开的网红餐厅你必排第一，总是呼朋唤友，手机里的美食图比任何画廊都精致。</div>
+      </div>
+      <div class="type-card">
+        <div class="type-code">ASVH</div>
+        <div class="type-name">🍵 自律潮流客</div>
+        <div class="type-desc">抹茶、适应原蘑菇、功能性饮品——你永远走在风潮前面，而且还特别上镜。</div>
+      </div>
+      <div class="type-card">
+        <div class="type-code">ALFI</div>
+        <div class="type-name">🍷 独食美食家</div>
+        <div class="type-desc">一个人去米其林餐厅毫无心理障碍。吃饭对你来说是私人冥想，每一口都值得全情投入。</div>
+      </div>
+      <div class="type-card">
+        <div class="type-code">ALFH</div>
+        <div class="type-name">🧘 正念食客</div>
+        <div class="type-desc">你记食物日记，知道食材的产地，在安静独处中找到好好吃饭的平静。某种程度上你已经开悟了。</div>
+      </div>
+      <div class="type-card">
+        <div class="type-code">ALVI</div>
+        <div class="type-name">🌙 深夜美学家</div>
+        <div class="type-desc">凌晨两点，一碗你亲手摆盘的拉面，无需观众。这是只属于你一个人的艺术。</div>
+      </div>
+      <div class="type-card">
+        <div class="type-code">ALVH</div>
+        <div class="type-name">🥗 极简完美主义者</div>
+        <div class="type-desc">厨房一尘不染，备餐盒按颜色分类，奶昔美得像装置艺术。你独自、干净、按自己的规则进食。</div>
+      </div>
+      <div class="type-card">
+        <div class="type-code">CSFI</div>
+        <div class="type-name">👨‍🍳 慷慨饕客</div>
+        <div class="type-desc">你活着就是为了喂饱身边的人。聚餐、家宴、节日盛宴——你的菜永远最先被抢光。</div>
+      </div>
+      <div class="type-card">
+        <div class="type-code">CSFH</div>
+        <div class="type-name">🫖 暖心主人</div>
+        <div class="type-desc">你能让羽衣甘蓝吃出家常味。朋友需要被治愈的时候，总是来找你。家里茶永远是热的。</div>
+      </div>
+      <div class="type-card">
+        <div class="type-code">CSVI</div>
+        <div class="type-name">🥂 早午餐女王/国王</div>
+        <div class="type-desc">餐厅电子表格、永不停歇的群聊、超自然的订位能力。周末为早午餐而存在，早午餐为你而存在。</div>
+      </div>
+      <div class="type-card">
+        <div class="type-code">CSVH</div>
+        <div class="type-name">🥑 健康生活博主</div>
+        <div class="type-desc">牛油果吐司、绿汁、谷物碗——发到网上，和朋友一起吃。你让健康生活看起来真的很有吸引力。</div>
+      </div>
+      <div class="type-card">
+        <div class="type-code">CLFI</div>
+        <div class="type-name">🛋️ 沙发美食评论家</div>
+        <div class="type-desc">对每家外卖平台上哪家店的哪道菜最好了如指掌。是认真的吃货——只是比起出门更爱居家。</div>
+      </div>
+      <div class="type-card">
+        <div class="type-code">CLFH</div>
+        <div class="type-name">📦 备餐大师</div>
+        <div class="type-desc">周日是神圣的。六个保鲜盒，分量精准，标签清晰。一周的混乱无法侵入你的饮食领地。</div>
+      </div>
+      <div class="type-card">
+        <div class="type-code">CLVI</div>
+        <div class="type-name">🍝 舒适美学派</div>
+        <div class="type-desc">你的番茄肉酱面看起来像是美食杂志封面。你不是在装高级——你只是有标准，这是不同的事。</div>
+      </div>
+      <div class="type-card">
+        <div class="type-code">CLVH</div>
+        <div class="type-name">🥣 安静的清淡食客</div>
+        <div class="type-desc">简单、健康、安静、属于自己。不争不抢不将就。知道自己要什么，是一种少有人拥有的自在。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">吃货测试</div>
+  <div class="footer-note">纯属娱乐，测试过程中没有任何吃货受到伤害。</div>
+</footer>
+
+<!-- QUIZ OVERLAY -->
+<div id="quiz">
+  <div class="quiz-inner">
+    <div class="quiz-header">
+      <div class="quiz-logo">吃货测试</div>
+      <button class="quiz-close" onclick="closeQuiz()">✕</button>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progress-bar" style="width:5%"></div>
+    </div>
+    <div class="q-count" id="q-count">第 1 题，共 20 题</div>
+    <div class="q-text" id="q-text"></div>
+    <div class="q-options" id="q-options"></div>
+  </div>
+</div>
+
+<!-- RESULT OVERLAY -->
+<div id="result">
+  <div class="result-inner">
+    <div class="result-emoji" id="result-emoji"></div>
+    <div class="result-code-badge" id="result-code"></div>
+    <div class="result-name" id="result-name"></div>
+    <div class="result-desc" id="result-desc"></div>
+    <div class="result-traits" id="result-traits"></div>
+    <div class="result-actions">
+      <button class="btn-retake" onclick="retake()">重新测试</button>
+      <button class="btn-share" onclick="shareResult()">分享结果</button>
+    </div>
+    <br><br>
+    <button class="btn-retake" onclick="closeResult()" style="font-size:0.8rem;padding:8px 20px;">返回首页</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  // 冒险性（5题）
+  {
+    text: "菜单上有道叫「发酵黑蒜泡沫」的菜，你……",
+    options: [
+      { label: "直接点。我就是为了这个来的。", dim: 'A', val: 1 },
+      { label: "先问服务员是什么口感，再考虑要不要点。", dim: 'A', val: 0 },
+      { label: "点个牛排。我知道自己喜欢什么。", dim: 'A', val: -1 }
+    ]
+  },
+  {
+    text: "你心目中理想的美食探险是……",
+    options: [
+      { label: "在完全陌生的城市，找一家没有中文菜单的路边摊，指着随便点。", dim: 'A', val: 1 },
+      { label: "找一家口碑很好的新料理，提前做好功课再去。", dim: 'A', val: 0 },
+      { label: "找到那道我最爱的菜的最佳版本。", dim: 'A', val: -1 }
+    ]
+  },
+  {
+    text: "饭桌上有人点了一道看起来很奇怪的东西，你……",
+    options: [
+      { label: "对方还没动筷你就已经伸叉子过去了。", dim: 'A', val: 1 },
+      { label: "先看他吃，再决定要不要试。", dim: 'A', val: 0 },
+      { label: "管好自己那份，让别人随便折腾。", dim: 'A', val: -1 }
+    ]
+  },
+  {
+    text: "「主厨惊喜套餐」意味着主厨全权决定你吃什么，且不提前告诉你。你……",
+    options: [
+      { label: "订！这才是吃饭的最高境界。", dim: 'A', val: 1 },
+      { label: "先问一下有没有过敏填写表，然后再订。", dim: 'A', val: 0 },
+      { label: "不了。我需要提前知道我在吃什么。", dim: 'A', val: -1 }
+    ]
+  },
+  {
+    text: "你家厨房里，一周的常态是……",
+    options: [
+      { label: "几乎每天都在尝试新菜谱或新技法。", dim: 'A', val: 1 },
+      { label: "新菜和老菜轮着来。", dim: 'A', val: 0 },
+      { label: "固定的五六道菜，好吃稳定，不折腾。", dim: 'A', val: -1 }
+    ]
+  },
+
+  // 社交性（5题）
+  {
+    text: "你印象中最美好的饭局，通常是……",
+    options: [
+      { label: "一大桌人，所有菜共享，热热闹闹。", dim: 'S', val: 1 },
+      { label: "和一两个好友，吃得刚刚好。", dim: 'S', val: 0 },
+      { label: "一个人，专心品每一口。", dim: 'S', val: -1 }
+    ]
+  },
+  {
+    text: "在餐厅点菜时，你通常会……",
+    options: [
+      { label: "多点几道，大家一起分着吃。", dim: 'S', val: 1 },
+      { label: "主要点自己想吃的，但乐意分口给别人尝。", dim: 'S', val: 0 },
+      { label: "点自己想吃的，不。我。不。分。", dim: 'S', val: -1 }
+    ]
+  },
+  {
+    text: "给别人做饭这件事，对你来说……",
+    options: [
+      { label: "是人生最大的快乐之一。", dim: 'S', val: 1 },
+      { label: "有心情的时候很享受。", dim: 'S', val: 0 },
+      { label: "太耗精力了，还不如把时间用来好好吃饭。", dim: 'S', val: -1 }
+    ]
+  },
+  {
+    text: "发现了一家超好吃的新餐厅，你会……",
+    options: [
+      { label: "立刻拉群，组织大家一起去。", dim: 'S', val: 1 },
+      { label: "告诉几个可能感兴趣的朋友。", dim: 'S', val: 0 },
+      { label: "自己再去一次，好好享受，不想带人。", dim: 'S', val: -1 }
+    ]
+  },
+  {
+    text: "对你来说，吃饭这件事本质上是……",
+    options: [
+      { label: "人与人之间最好的联结方式。", dim: 'S', val: 1 },
+      { label: "既是社交仪式，也是个人享受，两者都是。", dim: 'S', val: 0 },
+      { label: "一种私人的、最好独自品味的愉悦。", dim: 'S', val: -1 }
+    ]
+  },
+
+  // 口味 vs 颜值（5题）
+  {
+    text: "选餐厅时，你最看重……",
+    options: [
+      { label: "专门评价菜品味道和质量的点评。", dim: 'F', val: 1 },
+      { label: "口味评价和环境图片都会看。", dim: 'F', val: 0 },
+      { label: "室内环境照片和整体氛围感。", dim: 'F', val: -1 }
+    ]
+  },
+  {
+    text: "如果一家餐厅的菜极其好吃，但环境又破又吵，你会去吗？",
+    options: [
+      { label: "当然！菜好吃就是一切。", dim: 'F', val: 1 },
+      { label: "会去，但体验感会打折扣。", dim: 'F', val: 0 },
+      { label: "可能不会。环境也是吃饭体验的一部分。", dim: 'F', val: -1 }
+    ]
+  },
+  {
+    text: "菜上桌的瞬间，你……",
+    options: [
+      { label: "趁热直接开吃，温度是口感的一部分。", dim: 'F', val: 1 },
+      { label: "随手拍一张，然后开吃。", dim: 'F', val: 0 },
+      { label: "花时间调整角度，拍到满意再吃。", dim: 'F', val: -1 }
+    ]
+  },
+  {
+    text: "附近新开了一家很火的网红餐厅，你……",
+    options: [
+      { label: "等几个月，看看是否经得住时间检验。", dim: 'F', val: 1 },
+      { label: "先看评价，觉得靠谱再去。", dim: 'F', val: 0 },
+      { label: "立刻订座——不去怎么知道值不值得。", dim: 'F', val: -1 }
+    ]
+  },
+  {
+    text: "一顿好饭最精华的部分是……",
+    options: [
+      { label: "真实的味道、口感，以及菜本身的层次感。", dim: 'F', val: 1 },
+      { label: "好吃的食物加上好的氛围，缺一不可。", dim: 'F', val: 0 },
+      { label: "整体的感受——音乐、灯光、摆盘、人。", dim: 'F', val: -1 }
+    ]
+  },
+
+  // 放纵 vs 自律（5题）
+  {
+    text: "周日早上的早餐，你会吃……",
+    options: [
+      { label: "松饼加枫糖浆，再来几片培根，可以的话加杯气泡酒。", dim: 'I', val: 1 },
+      { label: "鸡蛋加吐司，满足但不过分。", dim: 'I', val: 0 },
+      { label: "奇亚籽燕麦或蛋白质粉水果碗。", dim: 'I', val: -1 }
+    ]
+  },
+  {
+    text: "熬过了压力极大的一周，你会用什么犒劳自己？",
+    options: [
+      { label: "点最爱的外卖，你值得。", dim: 'I', val: 1 },
+      { label: "吃顿好的，但不会完全放飞自我。", dim: 'I', val: 0 },
+      { label: "提前备好下周的餐食。掌控感就是治愈。", dim: 'I', val: -1 }
+    ]
+  },
+  {
+    text: "朋友给你夹了一块他自己做的巧克力蛋糕，你……",
+    options: [
+      { label: "大方接受，顺手再多来一块。", dim: 'I', val: 1 },
+      { label: "吃一小块，细细品。", dim: 'I', val: 0 },
+      { label: "礼貌地尝一小口，你在控糖。", dim: 'I', val: -1 }
+    ]
+  },
+  {
+    text: "看菜单的时候，你的目光会自然落在……",
+    options: [
+      { label: "最过瘾的那几道——芝士焗、红烧肉、奶油意面。", dim: 'I', val: 1 },
+      { label: "好吃又不会让你后悔的均衡选择。", dim: 'I', val: 0 },
+      { label: "最干净、最营养的那道菜。", dim: 'I', val: -1 }
+    ]
+  },
+  {
+    text: "甜品对你来说……",
+    options: [
+      { label: "是不容商量的。吃正餐就是为了有资格吃甜品。", dim: 'I', val: 1 },
+      { label: "看心情，好的话来一份。", dim: 'I', val: 0 },
+      { label: "偶尔，特殊场合。水果也算甜品。", dim: 'I', val: -1 }
+    ]
+  }
+];
+
+const types = {
+  'ASFI': {
+    name: '风味探险家',
+    emoji: '🗺️',
+    desc: "为了一碗传说中的牛肉面可以跨城而去，菜单还没看完就已经点了最奇怪的那道。食物是你的探索方式、社交货币和爱的语言。",
+    traits: ['勇于尝鲜', '慷慨好客', '口味至上', '敢于冒险']
+  },
+  'ASFH': {
+    name: '健康探索者',
+    emoji: '🥦',
+    desc: "在巴厘岛喝螺旋藻汁，在首尔吃发酵食品，午夜来碗味噌汤。你既大胆又自律，朋友们都指望你找到好吃又健康的选择。",
+    traits: ['勇于尝鲜', '注重健康', '乐于分享', '好奇心强']
+  },
+  'ASVI': {
+    name: '氛围制造者',
+    emoji: '✨',
+    desc: "每家新开的网红餐厅你必排第一，永远自带一群人，永远有故事。你的美食相册比任何画廊都更精心策划。氛围就是一切——而你的氛围总是最好的。",
+    traits: ['勇于尝鲜', '社交达人', '颜值控', '潮流嗅觉']
+  },
+  'ASVH': {
+    name: '自律潮流客',
+    emoji: '🍵',
+    desc: "抹茶、适应原蘑菇咖啡、功能性饮品——你在它们流行之前就喝上了。你在塑造饮食文化，而且总是拍出来好看得不像话。",
+    traits: ['勇于尝鲜', '健康前沿', '审美在线', '引领风潮']
+  },
+  'ALFI': {
+    name: '独食美食家',
+    emoji: '🍷',
+    desc: "一个人订米其林餐厅毫无心理负担。吃饭对你来说是私人冥想，每一口都值得全神贯注。他人的存在是一种干扰。",
+    traits: ['勇于尝鲜', '享受独处', '口味至上', '品味挑剔']
+  },
+  'ALFH': {
+    name: '正念食客',
+    emoji: '🧘',
+    desc: "你记食物日记，知道食材的产地，在安静的独处中找到好好吃饭的平静。食物即正念。某种程度上，你已经开悟了。",
+    traits: ['勇于尝鲜', '独自用餐', '用心感受', '身心健全']
+  },
+  'ALVI': {
+    name: '深夜美学家',
+    emoji: '🌙',
+    desc: "凌晨两点，一碗你亲手摆盘的拉面，无需观众。这是只属于你一个人的艺术，孤独本身就是重点。",
+    traits: ['勇于尝鲜', '独自用餐', '创意摆盘', '夜猫子']
+  },
+  'ALVH': {
+    name: '极简完美主义者',
+    emoji: '🥗',
+    desc: "厨房一尘不染，备餐盒按颜色分类，奶昔美得像装置艺术。你独自、干净、按自己的规则进食——身体从未感觉如此良好。",
+    traits: ['勇于尝鲜', '独自用餐', '注重健康', '追求极致']
+  },
+  'CSFI': {
+    name: '慷慨饕客',
+    emoji: '👨‍🍳',
+    desc: "你活着就是为了喂饱身边的人。聚餐、家宴、节日盛宴——你煮够一支军队吃的，你的菜永远最先被抢光。食物是爱，你毫不吝啬。",
+    traits: ['偏爱熟悉', '社交达人', '慷慨大方', '厨艺了得']
+  },
+  'CSFH': {
+    name: '暖心主人',
+    emoji: '🫖',
+    desc: "你能让羽衣甘蓝吃出家常味。朋友需要被治愈的时候，总是来找你。家里的茶永远是热的，冰箱里永远有好东西。",
+    traits: ['治愈系', '体贴关怀', '健康意识', '永远待客']
+  },
+  'CSVI': {
+    name: '早午餐女王/国王',
+    emoji: '🥂',
+    desc: "餐厅备忘录、永不停歇的群聊、几乎超自然的订座能力。周末为早午餐而存在，早午餐为你而存在。",
+    traits: ['社交达人', '计划周全', '氛围爱好者', '周末战士']
+  },
+  'CSVH': {
+    name: '健康生活博主',
+    emoji: '🥑',
+    desc: "牛油果吐司、绿汁、谷物碗——发到网上，和朋友一起享用。你让健康生活真的看起来很有吸引力，人人都想学你吃饭。",
+    traits: ['社交达人', '健康前沿', '审美在线', '正向影响']
+  },
+  'CLFI': {
+    name: '沙发美食评论家',
+    emoji: '🛋️',
+    desc: "对每家外卖平台上哪家店哪道菜最好了如指掌。是认真的吃货——只是相比出门，更爱待在家里。食物是重点，出门不是。",
+    traits: ['口味专家', '热爱居家', '外卖达人', '品味挑剔']
+  },
+  'CLFH': {
+    name: '备餐大师',
+    emoji: '📦',
+    desc: "周日是神圣的。六个保鲜盒，分量精准，标签清晰。一周的混乱侵入不了你的饮食领地，因为一切早已就绪。这就是力量。",
+    traits: ['井井有条', '注重健康', '独自用餐', '高度自律']
+  },
+  'CLVI': {
+    name: '舒适美学派',
+    emoji: '🍝',
+    desc: "你的番茄肉酱面看起来像是美食杂志封面。你不是在装高级——你只是有标准。这是两件完全不同的事，你心里清楚。",
+    traits: ['追求舒适', '审美敏锐', '独自用餐', '沉静内敛']
+  },
+  'CLVH': {
+    name: '安静的清淡食客',
+    emoji: '🥣',
+    desc: "简单、健康、安静、属于自己。不争不抢，不将就。知道自己要什么——这是少有人真正拥有的自在。",
+    traits: ['简约克制', '用心生活', '独立自主', '清淡饮食']
+  }
+};
+
+let currentQ = 0;
+let scores = { A: 0, S: 0, F: 0, I: 0 };
+let answered = {};
+
+function startQuiz() {
+  currentQ = 0;
+  scores = { A: 0, S: 0, F: 0, I: 0 };
+  answered = {};
+  document.getElementById('quiz').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+  renderQuestion();
+}
+
+function closeQuiz() {
+  document.getElementById('quiz').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function closeResult() {
+  document.getElementById('result').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  document.getElementById('q-count').textContent = `第 ${currentQ + 1} 题，共 ${questions.length} 题`;
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('progress-bar').style.width = `${((currentQ + 1) / questions.length) * 100}%`;
+
+  const container = document.getElementById('q-options');
+  container.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'q-option';
+    btn.textContent = opt.label;
+    if (answered[currentQ] === i) btn.classList.add('selected');
+    btn.onclick = () => selectOption(i, opt);
+    container.appendChild(btn);
+  });
+}
+
+function selectOption(idx, opt) {
+  if (answered[currentQ] !== undefined) {
+    const prev = questions[currentQ].options[answered[currentQ]];
+    scores[prev.dim] -= prev.val;
+  }
+  answered[currentQ] = idx;
+  scores[opt.dim] += opt.val;
+
+  document.querySelectorAll('.q-option').forEach((b, i) => {
+    b.classList.toggle('selected', i === idx);
+  });
+
+  setTimeout(() => {
+    if (currentQ < questions.length - 1) {
+      currentQ++;
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }, 350);
+}
+
+function showResult() {
+  const A = scores.A >= 0 ? 'A' : 'C';
+  const S = scores.S >= 0 ? 'S' : 'L';
+  const F = scores.F >= 0 ? 'F' : 'V';
+  const I = scores.I >= 0 ? 'I' : 'H';
+  const code = A + S + F + I;
+
+  const type = types[code] || types['CSVI'];
+
+  document.getElementById('result-emoji').textContent = type.emoji;
+  document.getElementById('result-code').textContent = code;
+  document.getElementById('result-name').textContent = type.name;
+  document.getElementById('result-desc').textContent = type.desc;
+
+  const traitsEl = document.getElementById('result-traits');
+  traitsEl.innerHTML = type.traits.map(t => `<span class="trait-pill">${t}</span>`).join('');
+
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('result').style.display = 'block';
+}
+
+function retake() {
+  document.getElementById('result').style.display = 'none';
+  startQuiz();
+}
+
+function shareResult() {
+  const code = document.getElementById('result-code').textContent;
+  const name = document.getElementById('result-name').textContent;
+  const text = `我做了吃货人格测试，结果是 ${code}「${name}」！你是哪种吃货？`;
+  if (navigator.share) {
+    navigator.share({ title: '我的吃货人格', text }).catch(() => {});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => alert('已复制到剪贴板！'));
+  } else {
+    alert(text);
+  }
+}
+</script>
+</body>
+</html>
